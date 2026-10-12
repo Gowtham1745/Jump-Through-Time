@@ -3,7 +3,6 @@ import {
   ArrowRight,
   Clock3,
   Compass,
-  Globe2,
   Heart,
   MapPin,
   MoonStar,
