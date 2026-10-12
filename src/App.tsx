@@ -383,7 +383,20 @@ function App() {
                 const isFavorite = favoriteIds.includes(city.id)
                 return (
                   <motion.article key={city.id} whileHover={{ y: -4 }} className={`overflow-hidden rounded-3xl border transition ${isSelected ? 'border-cyan-400/50 bg-slate-900/85' : 'border-white/10 bg-slate-900/70'} `}>
-                    <div className="h-36 bg-cover bg-center" style={{ backgroundImage: `url('${city.image}')` }} />
+                    <div className="relative h-44 overflow-hidden bg-slate-800">
+                      <img
+                        src={city.image}
+                        alt={`${city.city}, ${city.country}`}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                        onError={(event) => {
+                          event.currentTarget.onerror = null
+                          event.currentTarget.src = 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=1200&q=85'
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-slate-950/10" />
+                      <span className="absolute bottom-3 left-4 rounded-full border border-white/20 bg-slate-950/50 px-3 py-1 text-xs font-medium uppercase tracking-[0.18em] text-white backdrop-blur">{city.continent}</span>
+                    </div>
                     <div className="p-5">
                       <div className="flex items-start justify-between gap-3">
                         <div>
@@ -485,7 +498,19 @@ function App() {
           <div className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
             {activeLandmarks.map((landmark) => (
               <article key={landmark.name} className="overflow-hidden rounded-3xl border border-white/10 bg-slate-900/60">
-                <div className="h-40 bg-cover bg-center" style={{ backgroundImage: `url('${landmark.image}')` }} />
+                <div className="relative h-48 overflow-hidden bg-slate-800">
+                  <img
+                    src={landmark.image}
+                    alt={landmark.name}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition duration-700 hover:scale-105"
+                    onError={(event) => {
+                      event.currentTarget.onerror = null
+                      event.currentTarget.src = 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=85'
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-slate-950/10" />
+                </div>
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-3">
                     <div>
