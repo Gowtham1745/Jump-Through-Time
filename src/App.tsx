@@ -313,24 +313,20 @@ function App() {
 
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }} className="relative mx-auto w-full max-w-xl">
             <div className="globe-shell">
-              <div className="globe">
-                {cities.map((city) => {
-                  const left = ((city.lng + 180) / 360) * 100
-                  const top = ((90 - city.lat) / 180) * 100
-                  const isActive = city.id === selectedCityId
-                  return (
-                    <button
-                      key={city.id}
-                      type="button"
-                      aria-label={`Select ${city.city}`}
-                      onClick={() => whenCityClicked(city.id)}
-                      className={`marker ${isActive ? 'active' : ''}`}
-                      style={{ left: `${left}%`, top: `${top}%` }}
-                    >
-                      <span />
-                    </button>
-                  )
-                })}
+              <div className="world-map" role="img" aria-label="Stylized world map">
+                <span className="map-region region-americas">AMERICAS</span>
+                <span className="map-region region-europe">EUROPE</span>
+                <span className="map-region region-africa">AFRICA</span>
+                <span className="map-region region-asia">ASIA</span>
+                <span className="map-region region-oceania">OCEANIA</span>
+                <div className="map-live-card">
+                  <span className="map-live-indicator" />
+                  <div>
+                    <span className="map-live-kicker">NOW EXPLORING</span>
+                    <strong>{selectedCity.city}</strong>
+                    <small>{formatTime(now, selectedCity.zone, true)} <span>· 24h {formatTime(now, selectedCity.zone, false)}</span></small>
+                  </div>
+                </div>
               </div>
               <div className="absolute inset-x-10 bottom-6 rounded-2xl border border-cyan-400/30 bg-slate-950/70 p-4 backdrop-blur-md">
                 <div className="flex items-center justify-between gap-4">
@@ -458,24 +454,20 @@ function App() {
 
           <div className="relative">
             <div className="globe-shell lg:h-[500px]">
-              <div className="globe">
-                {cities.map((city) => {
-                  const left = ((city.lng + 180) / 360) * 100
-                  const top = ((90 - city.lat) / 180) * 100
-                  const isActive = city.id === selectedCityId
-                  return (
-                    <button
-                      key={`${city.id}-globe`}
-                      type="button"
-                      onClick={() => whenCityClicked(city.id)}
-                      className={`marker ${isActive ? 'active large' : ''}`}
-                      style={{ left: `${left}%`, top: `${top}%` }}
-                      title={`${city.city} · ${formatTime(now, city.zone, true)} (24h ${formatTime(now, city.zone, false)})`}
-                    >
-                      <span />
-                    </button>
-                  )
-                })}
+              <div className="world-map" role="img" aria-label="Stylized world map">
+                <span className="map-region region-americas">AMERICAS</span>
+                <span className="map-region region-europe">EUROPE</span>
+                <span className="map-region region-africa">AFRICA</span>
+                <span className="map-region region-asia">ASIA</span>
+                <span className="map-region region-oceania">OCEANIA</span>
+                <div className="map-live-card">
+                  <span className="map-live-indicator" />
+                  <div>
+                    <span className="map-live-kicker">NOW EXPLORING</span>
+                    <strong>{selectedCity.city}</strong>
+                    <small>{formatTime(now, selectedCity.zone, true)} <span>· 24h {formatTime(now, selectedCity.zone, false)}</span></small>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
