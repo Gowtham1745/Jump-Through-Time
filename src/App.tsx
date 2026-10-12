@@ -139,7 +139,7 @@ function App() {
   const [search, setSearch] = useState('')
   const [continent, setContinent] = useState<ContinentFilter>('All')
   const [sort, setSort] = useState<'name' | 'time'>('time')
-  const [hour12, setHour12] = useState(false)
+  const hour12 = true
   const [selectedCityId, setSelectedCityId] = useState('tokyo')
   const [favoriteIds, setFavoriteIds] = useState<string[]>(() => {
     const stored = typeof window !== 'undefined' ? window.localStorage.getItem('chronosphere-favorites') : null
@@ -185,7 +185,7 @@ function App() {
 
     return [...matches].sort((a, b) => {
       if (sort === 'name') return a.city.localeCompare(b.city)
-      return formatTime(now, a.zone, hour12).localeCompare(formatTime(now, b.zone, hour12))
+      return formatTime(now, a.zone, false).localeCompare(formatTime(now, b.zone, false))
     })
   }, [continent, hour12, now, search, sort])
 
@@ -299,12 +299,13 @@ function App() {
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
                 <p className="text-xs uppercase tracking-[0.22em] text-slate-400">UTC</p>
-                <p className="mt-2 text-2xl font-semibold text-white">{new Intl.DateTimeFormat('en-GB', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).format(now)}</p>
+                <p className="mt-2 text-2xl font-semibold text-white">{formatTime(now, 'UTC', true)}
+                <span className="mt-1 block text-xs font-normal text-slate-400">24h · {formatTime(now, 'UTC', false)}</span></p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
                 <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Selected</p>
                 <p className="mt-2 text-xl font-semibold text-white">{selectedCity.city}</p>
-                <p className="text-sm text-slate-300">{formatTime(now, selectedCity.zone, hour12)} • {formatDate(now, selectedCity.zone)}</p>
+                <p className="text-sm text-slate-300">{formatTime(now, selectedCity.zone, true)} • {formatDate(now, selectedCity.zone)}</p>
               </div>
             </div>
           </div>
@@ -337,7 +338,8 @@ function App() {
                     <p className="mt-1 text-lg font-semibold text-white">{selectedCity.city}</p>
                   </div>
                   <div className="text-right text-sm text-slate-300">
-                    <p>{formatTime(now, selectedCity.zone, hour12)}</p>
+                    <p>{formatTime(now, selectedCity.zone, true)}</p>
+                    <p className="text-xs text-slate-400">24h · {formatTime(now, selectedCity.zone, false)}</p>
                     <p className="text-cyan-200">{cityState}</p>
                   </div>
                 </div>
@@ -366,9 +368,6 @@ function App() {
                 <option value="time">Sort by time</option>
                 <option value="name">Sort by name</option>
               </select>
-              <button type="button" onClick={() => setHour12((value) => !value)} className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-2 text-sm font-medium text-cyan-100">
-                {hour12 ? '12h' : '24h'}
-              </button>
             </div>
           </div>
 
@@ -379,7 +378,8 @@ function App() {
           ) : (
             <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
               {visibleCities.map((city) => {
-                const localTime = formatTime(now, city.zone, hour12)
+                const localTime = formatTime(now, city.zone, true)
+                const localTime24 = formatTime(now, city.zone, false)
                 const dateText = formatDate(now, city.zone)
                 const phase = getPhase(now, city.zone)
                 const isSelected = city.id === selectedCityId
@@ -439,7 +439,8 @@ function App() {
               <div className="grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Local time</p>
-                  <p className="mt-2 text-xl font-semibold text-white">{formatTime(now, selectedCity.zone, hour12)}</p>
+                  <p className="mt-2 text-xl font-semibold text-white">{formatTime(now, selectedCity.zone, true)}</p>
+                  <p className="text-xs text-slate-400">24h · {formatTime(now, selectedCity.zone, false)}</p>
                 </div>
                 <div className="rounded-2xl border border-white/10 bg-slate-950/60 p-3">
                   <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Offset</p>
@@ -468,7 +469,7 @@ function App() {
                       onClick={() => whenCityClicked(city.id)}
                       className={`marker ${isActive ? 'active large' : ''}`}
                       style={{ left: `${left}%`, top: `${top}%` }}
-                      title={`${city.city} · ${formatTime(now, city.zone, hour12)}`}
+                      title={`${city.city} · ${formatTime(now, city.zone, true)} (24h ${formatTime(now, city.zone, false)})`}
                     >
                       <span />
                     </button>
@@ -504,7 +505,7 @@ function App() {
                   <p className="mt-3 text-sm text-slate-300">{landmark.description}</p>
                   <div className="mt-4 flex items-center justify-between text-xs uppercase tracking-[0.12em] text-slate-400">
                     <span>{landmark.zone}</span>
-                    <span>{formatTime(now, landmark.zone, hour12)}</span>
+                    <span className="text-right"><span className="block">{formatTime(now, landmark.zone, true)}</span><span className="block text-xs normal-case tracking-normal text-slate-500">24h · {formatTime(now, landmark.zone, false)}</span></span>
                   </div>
                 </div>
               </article>
@@ -561,7 +562,8 @@ function App() {
                   <div className="flex items-center justify-between gap-4">
                     <div>
                       <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{city.city}</p>
-                      <p className="mt-2 text-3xl font-semibold text-white">{formatTime(now, city.zone, hour12)}</p>
+                      <p className="mt-2 text-3xl font-semibold text-white">{formatTime(now, city.zone, true)}</p>
+                      <p className="text-xs text-slate-400">24h · {formatTime(now, city.zone, false)}</p>
                     </div>
                     <div className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-3 py-1 text-xs uppercase tracking-[0.18em] text-cyan-100">{formatOffset(now, city.zone)}</div>
                   </div>
