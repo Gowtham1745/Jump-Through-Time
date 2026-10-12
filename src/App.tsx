@@ -241,8 +241,8 @@ function App() {
               exit={{ scale: 0.98, opacity: 0 }}
               className="relative overflow-hidden rounded-3xl border border-cyan-400/40 bg-slate-900/80 px-8 py-10 text-center shadow-[0_30px_120px_rgba(34,211,238,0.25)]"
             >
-              <div className="mb-4 flex justify-center text-cyan-300">
-                <Globe2 className="h-12 w-12" />
+              <div className="mb-5 flex justify-center">
+                <img src="/Jump-Through-Time/pixar-prince-logo.jpg" alt="Pixar Prince profile" className="h-20 w-20 rounded-full border-2 border-cyan-300/70 object-cover shadow-[0_0_35px_rgba(34,211,238,0.24)]" />
               </div>
               <p className="text-xs uppercase tracking-[0.45em] text-cyan-200/80">Jump Through Time</p>
               <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white md:text-6xl">The world never sleeps.</h1>
@@ -260,9 +260,7 @@ function App() {
       <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           <a href="#home" className="flex items-center gap-3 text-sm font-medium tracking-[0.2em] text-cyan-200 uppercase">
-            <span className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-500/10 text-cyan-200">
-              <Globe2 className="h-4 w-4" />
-            </span>
+            <img src="/Jump-Through-Time/pixar-prince-logo.jpg" alt="Pixar Prince profile" className="h-10 w-10 rounded-full border border-cyan-300/60 object-cover shadow-[0_0_18px_rgba(34,211,238,0.2)]" />
             Jump Through Time
           </a>
           <nav className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
