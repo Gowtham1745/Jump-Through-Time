@@ -398,6 +398,7 @@ function App() {
                       <div className="mt-5 flex items-end justify-between gap-3">
                         <div>
                           <p className="text-3xl font-semibold text-white">{localTime}</p>
+                          <p className="mt-1 text-xs font-medium tracking-wide text-cyan-200/80">24-hour: {localTime24}</p>
                           <p className="text-sm text-slate-300">{dateText}</p>
                         </div>
                         <span className="rounded-full bg-slate-800 px-2 py-1 text-xs uppercase tracking-[0.15em] text-cyan-100">{phase}</span>
