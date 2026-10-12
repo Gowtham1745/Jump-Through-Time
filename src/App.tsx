@@ -244,7 +244,7 @@ function App() {
               <div className="mb-4 flex justify-center text-cyan-300">
                 <Globe2 className="h-12 w-12" />
               </div>
-              <p className="text-xs uppercase tracking-[0.45em] text-cyan-200/80">Chronosphere</p>
+              <p className="text-xs uppercase tracking-[0.45em] text-cyan-200/80">Jump Through Time</p>
               <h1 className="mt-5 text-4xl font-semibold tracking-tight text-white md:text-6xl">The world never sleeps.</h1>
               <p className="mt-4 max-w-xl text-sm text-slate-300 md:text-base">
                 Every second, somewhere on Earth, a new moment begins.
@@ -263,7 +263,7 @@ function App() {
             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-cyan-400/40 bg-cyan-500/10 text-cyan-200">
               <Globe2 className="h-4 w-4" />
             </span>
-            Chronosphere
+            Jump Through Time
           </a>
           <nav className="hidden items-center gap-6 text-sm text-slate-300 md:flex">
             {navItems.map((item) => (
@@ -605,7 +605,7 @@ function App() {
       <footer className="border-t border-white/10 bg-slate-950/80">
         <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.5fr_1fr_1fr] lg:px-8">
           <div>
-            <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/80">Chronosphere</p>
+            <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/80">Jump Through Time</p>
             <p className="mt-4 max-w-md text-sm text-slate-300">One Planet. A Million Moments. A cinematic world time platform built for discovery, comparison, and direction.</p>
           </div>
           <div>
