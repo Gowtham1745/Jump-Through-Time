@@ -299,13 +299,14 @@ function App() {
             <div className="mt-8 flex flex-col gap-4 sm:flex-row">
               <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
                 <p className="text-xs uppercase tracking-[0.22em] text-slate-400">UTC</p>
-                <p className="mt-2 text-2xl font-semibold text-white">{formatTime(now, 'UTC', true)}
-                <span className="mt-1 block text-xs font-normal text-slate-400">24h · {formatTime(now, 'UTC', false)}</span></p>
+                <p className="mt-2 text-2xl font-semibold text-white">{formatTime(now, 'UTC', true)}</p>
+                <p className="mt-1 text-xs text-slate-400">24h · {formatTime(now, 'UTC', false)}</p>
               </div>
               <div className="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
                 <p className="text-xs uppercase tracking-[0.22em] text-slate-400">Selected</p>
                 <p className="mt-2 text-xl font-semibold text-white">{selectedCity.city}</p>
                 <p className="text-sm text-slate-300">{formatTime(now, selectedCity.zone, true)} • {formatDate(now, selectedCity.zone)}</p>
+                <p className="text-xs text-slate-400">24h · {formatTime(now, selectedCity.zone, false)}</p>
               </div>
             </div>
           </div>
