@@ -154,6 +154,35 @@ function App() {
   const [mapPoint, setMapPoint] = useState<{ lat: number; lng: number; zone: string; name: string } | null>(null)
   const [mapZoneLoading, setMapZoneLoading] = useState(false)
 
+  const locateMe = () => {
+    if (!navigator.geolocation) {
+      window.alert('Your browser does not support location detection.')
+      return
+    }
+    setMapZoneLoading(true)
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = Number(position.coords.latitude.toFixed(4))
+      const lng = Number(position.coords.longitude.toFixed(4))
+      const point = { lat, lng, zone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC', name: 'Your location' }
+      setMapPoint(point)
+      try {
+        const response = await fetch(`https://timeapi.io/api/TimeZone/coordinate?latitude=${lat}&longitude=${lng}`)
+        if (response.ok) {
+          const data = await response.json() as { timeZone?: string; timeZoneName?: string }
+          const zone = data.timeZone || data.timeZoneName
+          if (zone && zone.includes('/')) setMapPoint({ ...point, zone })
+        }
+      } catch {
+        // The browser's current time zone remains a reasonable fallback for this device.
+      } finally {
+        setMapZoneLoading(false)
+      }
+    }, () => {
+      setMapZoneLoading(false)
+      window.alert('Location access was blocked. Allow location permission in your browser and try again.')
+    }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 })
+  }
+
   const handleWorldMapClick = async (event: React.MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
     const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
@@ -339,6 +368,7 @@ function App() {
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }} className="relative mx-auto w-full max-w-xl">
             <div className="globe-shell">
               <div className="world-map interactive-world-map" role="application" aria-label="Interactive world map. Click anywhere to inspect coordinates and local time." onClick={handleWorldMapClick} title="Click anywhere on the map to inspect its coordinates and local time">
+                <button type="button" className="map-locate-button" onClick={(event) => { event.stopPropagation(); locateMe() }} title="Use your device location">◎ Locate me</button>
                 <span className="map-region region-americas">AMERICAS</span>
                 <span className="map-region region-europe">EUROPE</span>
                 <span className="map-region region-africa">AFRICA</span>
