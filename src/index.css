@@ -159,3 +159,67 @@ select {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 }
+
+
+/* Interactive neon world map */
+.interactive-world-map {
+  cursor: crosshair;
+  isolation: isolate;
+  background-color: #041323;
+  background-image:
+    radial-gradient(circle at 50% 45%, rgba(6, 182, 212, .12), transparent 58%),
+    url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg');
+  background-blend-mode: screen, screen;
+  filter: saturate(1.2) contrast(1.06);
+}
+.interactive-world-map::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 39px, rgba(34,211,238,.12) 40px, transparent 41px),
+              repeating-linear-gradient(90deg, transparent 0 39px, rgba(34,211,238,.10) 40px, transparent 41px);
+  mask-image: linear-gradient(transparent, #000 20%, #000 80%, transparent);
+}
+.map-city-dot {
+  position: absolute;
+  z-index: 3;
+  width: 9px;
+  height: 9px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(207,250,254,.95);
+  border-radius: 50%;
+  background: #22d3ee;
+  box-shadow: 0 0 7px 2px rgba(34,211,238,.8), 0 0 18px 5px rgba(34,211,238,.3);
+  cursor: pointer;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.map-city-dot:hover, .map-city-dot-active {
+  z-index: 4;
+  transform: translate(-50%, -50%) scale(1.65);
+  background: #f0fdfa;
+  box-shadow: 0 0 9px 4px rgba(103,232,249,.95), 0 0 26px 9px rgba(34,211,238,.55);
+}
+.map-click-marker {
+  position: absolute;
+  z-index: 5;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #fb7185;
+  box-shadow: 0 0 0 7px rgba(251,113,133,.2), 0 0 28px 12px rgba(251,113,133,.8);
+  pointer-events: none;
+  animation: map-ping 1.6s ease-out infinite;
+}
+.map-coordinates { color: #67e8f9 !important; font-variant-numeric: tabular-nums; }
+@keyframes map-ping {
+  0%, 100% { box-shadow: 0 0 0 5px rgba(251,113,133,.16), 0 0 22px 8px rgba(251,113,133,.65); }
+  50% { box-shadow: 0 0 0 11px rgba(251,113,133,.04), 0 0 32px 13px rgba(251,113,133,.9); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-click-marker { animation: none; }
+}
