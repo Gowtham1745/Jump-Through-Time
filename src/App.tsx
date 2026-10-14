@@ -150,7 +150,35 @@ function App() {
   })
   const [compareA, setCompareA] = useState('london')
   const [compareB, setCompareB] = useState('new-york')
-  const [visitedIds, setVisitedIds] = useState<string[]>([]) 
+  const [visitedIds, setVisitedIds] = useState<string[]>([])
+  const [mapPoint, setMapPoint] = useState<{ lat: number; lng: number; zone: string; name: string } | null>(null)
+  const [mapZoneLoading, setMapZoneLoading] = useState(false)
+
+  const handleWorldMapClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = event.currentTarget.getBoundingClientRect()
+    const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
+    const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
+    const lat = Number((90 - y * 180).toFixed(4))
+    const lng = Number((x * 360 - 180).toFixed(4))
+    const nearest = [...cities].sort((a, b) => {
+      const distance = (city: City) => Math.hypot(city.lat - lat, (city.lng - lng) * Math.cos(lat * Math.PI / 180))
+      return distance(a) - distance(b)
+    })[0]
+    setMapPoint({ lat, lng, zone: nearest.zone, name: `${lat.toFixed(4)}°, ${lng.toFixed(4)}°` })
+    setMapZoneLoading(true)
+    try {
+      const response = await fetch(`https://timeapi.io/api/TimeZone/coordinate?latitude=${lat}&longitude=${lng}`)
+      if (response.ok) {
+        const data = await response.json() as { timeZone?: string; timeZoneName?: string }
+        const zone = data.timeZone || data.timeZoneName
+        if (zone && zone.includes('/')) setMapPoint({ lat, lng, zone, name: `${lat.toFixed(4)}°, ${lng.toFixed(4)}°` })
+      }
+    } catch {
+      // Keep the nearest known city's IANA time zone if the lookup service is unavailable.
+    } finally {
+      setMapZoneLoading(false)
+    }
+  }
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(new Date()), 1000)
@@ -310,18 +338,23 @@ function App() {
 
           <motion.div initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.15 }} className="relative mx-auto w-full max-w-xl">
             <div className="globe-shell">
-              <div className="world-map" role="img" aria-label="Stylized world map">
+              <div className="world-map interactive-world-map" role="application" aria-label="Interactive world map. Click anywhere to inspect coordinates and local time." onClick={handleWorldMapClick} title="Click anywhere on the map to inspect its coordinates and local time">
                 <span className="map-region region-americas">AMERICAS</span>
                 <span className="map-region region-europe">EUROPE</span>
                 <span className="map-region region-africa">AFRICA</span>
                 <span className="map-region region-asia">ASIA</span>
                 <span className="map-region region-oceania">OCEANIA</span>
+                {cities.map((city) => (
+                  <button key={city.id} type="button" className={`map-city-dot ${city.id === selectedCityId ? 'map-city-dot-active' : ''}`} style={{ left: `${((city.lng + 180) / 360) * 100}%`, top: `${((90 - city.lat) / 180) * 100}%` }} aria-label={`Select ${city.city}`} title={city.city} onClick={(event) => { event.stopPropagation(); whenCityClicked(city.id) }} />
+                ))}
+                {mapPoint && <span className="map-click-marker" style={{ left: `${((mapPoint.lng + 180) / 360) * 100}%`, top: `${((90 - mapPoint.lat) / 180) * 100}%` }} />}
                 <div className="map-live-card">
                   <span className="map-live-indicator" />
                   <div>
-                    <span className="map-live-kicker">NOW EXPLORING</span>
-                    <strong>{selectedCity.city}</strong>
-                    <small>{formatTime(now, selectedCity.zone, true)} <span>· 24h {formatTime(now, selectedCity.zone, false)}</span></small>
+                    <span className="map-live-kicker">{mapPoint ? 'CLICKED COORDINATE' : 'NOW EXPLORING'}</span>
+                    <strong>{mapPoint ? mapPoint.name : selectedCity.city}</strong>
+                    <small>{mapPoint ? (mapZoneLoading ? 'Finding local time zone…' : `${formatTime(now, mapPoint.zone, true)} · 24h ${formatTime(now, mapPoint.zone, false)}`) : `${formatTime(now, selectedCity.zone, true)} · 24h ${formatTime(now, selectedCity.zone, false)}`}</small>
+                    {mapPoint && <small className="map-coordinates">LAT {mapPoint.lat.toFixed(4)} · LNG {mapPoint.lng.toFixed(4)} · {mapPoint.zone}</small>}
                   </div>
                 </div>
               </div>
