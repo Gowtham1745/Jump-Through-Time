@@ -11,6 +11,7 @@ import {
   SunMedium,
 } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import type { MouseEvent } from 'react'
 
 type City = {
   id: string
@@ -183,7 +184,7 @@ function App() {
     }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 })
   }
 
-  const handleWorldMapClick = async (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleWorldMapClick = async (event: MouseEvent<HTMLDivElement>) => {
     const rect = event.currentTarget.getBoundingClientRect()
     const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width))
     const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height))
