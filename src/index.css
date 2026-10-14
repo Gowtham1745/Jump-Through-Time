@@ -223,3 +223,23 @@ select {
 @media (prefers-reduced-motion: reduce) {
   .map-click-marker { animation: none; }
 }
+
+
+.map-locate-button {
+  position: absolute;
+  z-index: 8;
+  top: 14px;
+  right: 14px;
+  border: 1px solid rgba(103,232,249,.48);
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: #cffafe;
+  background: rgba(3, 12, 25, .88);
+  box-shadow: 0 0 22px rgba(34,211,238,.18);
+  backdrop-filter: blur(12px);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  cursor: pointer;
+}
+.map-locate-button:hover { background: rgba(8, 47, 73, .96); box-shadow: 0 0 26px rgba(34,211,238,.3); }
